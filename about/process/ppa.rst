@@ -1,33 +1,20 @@
-UBports Debian repository
-=========================
+UBports APT archives
+====================
 
-repo.ubports.com
-----------------
+To help us deliver our code into Ubuntu Touch as effortlessly as possible, our CI automatically build our Git repositories into a number of APT archives hosted at http://repo.ubports.com/. This page documents what archives are available and for what purposes.
 
-This is the legacy package repository for UBports projects.  It hosts the Debian packages of the current stable release.
+- ``devel-<Ubuntu LTS codename>`` (e.g. ``devel-noble``) is used for the bleeding-edge Ubuntu Touch development. This will then built into our bleeding-edge phone images used primarily for testing.
+- ``devel-debian`` is not used to build images, but is used to satisfy dependencies when building our packages against Debian testing.
+- Release archives (e.g. ``24.6.x``) are used to build phone images for a given major release and subsequent minor releases. They start out as a snapshot of the current ``devel-<Ubuntu LTS codename>``.
 
-repo2.ubports.com
------------------
+Our CI build code in ``main`` branch against latest or upcoming Ubuntu LTS and Debian testing, and then put them into ``devel-<Ubuntu LTS codename>`` and ``devel-debian`` respectively. For ``ubports/<major release>.x`` branches, CI will build them into the corresponding release archives.
 
-This is the current package repository for UBports projects.  It contains Debian packages of the development version of Ubuntu Touch and various PPAs.
+APT archives for Merge Requests
+-------------------------------
 
-Repository naming convention
-----------------------------
+In addition to archives mentioned above, we also create APT archives for MRs made against our Git repositories. This allows us to test the result of the build on real device using ``ubports-qa`` before merging the code. For each MR, the CI will build the code against all the same targets as the MR's target branch, and then will append ``_-_PR_<repository name>_<MR number>`` to them [1]_. For example:
 
-Native packages
-^^^^^^^^^^^^^^^
+- An MR numberred 100 made against the ``main`` branch of Git repository ``lomiri`` (when the current Ubuntu LTS is ``noble``) will have APT archives named ``devel-noble_-_PR_lomiri_100`` *and* ``devel-debian_-_PR_lomiri_100``.
+- An MR numbered 125 made against the ``ubports/24.6.x`` branch of Git repository ``morph-browser`` will have an APT archive named ``24.6.x_-_PR_morph-browser_125``.
 
-Native packages (e.g. https://gitlab.com/ubports/core/lomiri-system-settings) are repositories that contain a ``debian/`` folder **with** the source used to create the Debian source package.
-
-The name of the Debian source package generated from the repository and the name of the Git-repository should be the same.
-
-Non-native packages
-^^^^^^^^^^^^^^^^^^^
-
-Non-native package repositories (e.g. https://gitlab.com/ubports/core/packaging/sensorfw) contain a ``debian`` folder **without** the source used to create the Debian source package.
-The URL of the upstream source tarball and filename of the ``.orig.tar.gz`` archive must be specified on a separate line each in a file called ``ubports.source_location`` inside the ``debian`` directory.  The CI system uses this information to download and rename the upstream sources and to create a Debian source package.
-
-Creating new PPAs
------------------
-
-New PPAs can be created dynamically by the CI server using a special :doc:`git-branch naming convention <branch-naming>`. The name of the branch translates literally to the name of the PPA which is a distribution in the package repository at: ``https://repo2.ubports.com/dists/[branch name]``
+.. [1] The ``PR`` word stuck around from the time we hosted our code on GitHub.
