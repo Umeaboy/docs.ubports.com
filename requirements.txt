@@ -2,3 +2,11 @@ sphinx==4.5.0
 furo==2021.6.24b37
 sphinx-intl
 sphinxext-rediraffe
+
+# TODO: cap versions of our transitive dependencies so that it still work with
+# Sphinx 4.5.0. Remove when Sphinx is upgraded.
+sphinxcontrib-applehelp<=1.0.4
+sphinxcontrib-devhelp<=1.0.2
+sphinxcontrib-htmlhelp<=2.0.1
+sphinxcontrib-serializinghtml<=1.1.5
+sphinxcontrib-qthelp<=1.0.3
